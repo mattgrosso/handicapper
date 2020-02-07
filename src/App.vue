@@ -1,18 +1,30 @@
 <template>
   <div id="app">
-    <div class="game-tiles" v-if="!detailedGame">
+    <div class="search">
+      <input
+        v-model="search"
+        type="text"
+        placeholder="search..."
+      >
+    </div>
+    <div
+      v-if="!detailedGame"
+      class="game-tiles"
+    >
       <game-tile
-        v-for="game in games"
+        v-for="game in filteredGames"
         :key="game.id"
         :game="game"
-        @selected="processGame(game)"/>
+        @selected="processGame(game)"
+      />
     </div>
     <game-details
       v-if="detailedGame"
       :game="detailedGame"
       :players="players"
       :game-stats="gameStats"
-      @close="detailedGame = null"/>
+      @close="detailedGame = null"
+    />
   </div>
 </template>
 
@@ -23,6 +35,34 @@ import GameDetails from "./components/GameDetails.vue";
 
 export default {
   name: "App",
+  components: {
+    GameTile,
+    GameDetails
+  },
+  data () {
+    return {
+      games: null,
+      detailedGame: null,
+      players: null,
+      gameStats: null,
+      search: ""
+    };
+  },
+  computed: {
+    filteredGames () {
+      if (this.games) {
+        return this.games.filter((game) => {
+          if (this.search) {
+            return game.title.toLowerCase().includes(this.search.toLowerCase());
+          } else {
+            return true;
+          }
+        })
+      } else {
+        return this.games;
+      }
+    }
+  },
   mounted () {
     axios
       .get(`https://www.boardgamegeek.com/xmlapi2/collection?username=mattgrosso&minplays=1&own=1&subtype=boardgame`)
@@ -30,18 +70,6 @@ export default {
         const xmlObject = this.xmlStringToObject(response.data);
         this.games = this.cleanGames(this.xmlToJson(xmlObject).items.item);
       })
-  },
-  data () {
-    return {
-      games: null,
-      detailedGame: null,
-      players: null,
-      gameStats: null
-    };
-  },
-  components: {
-    GameTile,
-    GameDetails
   },
   methods: {
     getPlaysForGame (gameID) {
@@ -171,7 +199,24 @@ export default {
 </script>
 
 <style lang="scss">
+  @import "./assets/styles/reset.scss";
+
+  body {
+    background-color: #032d00;
+  }
+
   #app {
+    .search {
+      display: flex;
+      justify-content: center;
+      padding: 24px 0 0;
+
+      input {
+        font-size: 1.5rem;
+        text-align: center;
+        width: 90%;
+      }
+    }
     .game-tiles {
       display: flex;
       flex-wrap: wrap;
