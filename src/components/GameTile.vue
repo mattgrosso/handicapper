@@ -1,6 +1,8 @@
 <template>
   <div class="game-tile" @click="$emit('selected')">
-    <img :src="game.thumbnail" :alt="game.title">
+    <div class="image-wrapper">
+      <img :src="game.thumbnail" :alt="game.title">
+    </div>
     <div class="title">{{game.title}}</div>
   </div>
 </template>
@@ -28,9 +30,10 @@
     cursor: pointer;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     margin: 12px;
-    padding: 24px 12px;
-    width: calc(100% - 24px);
+    padding: 12px;
+    width: calc(50% - 24px);
 
     &:hover {
       background: black;
@@ -42,28 +45,35 @@
     }
 
     @media screen and (min-width: $sm) {
-      width: calc(50% - 24px);
-    }
-
-    @media screen and (min-width: $md) {
+      padding: 24px 12px;
       width: calc(33% - 24px);
     }
 
-    @media screen and (min-width: $lg) {
+    @media screen and (min-width: $md) {
       width: calc(20% - 24px);
     }
 
-    img {
-      border: 1px solid transparent;
-      margin-bottom: 24px;
-      max-width: 100%;
+    .image-wrapper {
+      align-items: center;
+      display: flex;
+      flex: auto;
+
+      img {
+        border: 1px solid transparent;
+        max-width: 100%;
+      }
     }
 
     .title {
       font-family: 'Tinos', serif;
       font-size: 1.5rem;
       hyphens: auto;
+      margin-top: 12px;
       text-align: center;
+
+      @media screen and (min-width: $sm) {
+        margin-top: 24px;
+      }
     }
   }
 </style>
