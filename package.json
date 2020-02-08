@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build && echo game-handicapper.surge.sh > ./dist/CNAME",
+    "deploy": "vue-cli-service build && echo game-handicapper.surge.sh > ./dist/CNAME && cd dist && surge",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
