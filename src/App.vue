@@ -2,29 +2,28 @@
   <div id="app">
     <div
       v-if="!detailedGame"
-      class="game-tiles"
-    >
+      class="game-tiles">
       <div class="search">
         <input
           v-model="search"
           type="text"
-          placeholder="search..."
-        >
+          placeholder="search...">
+        <div class="clear-search" @click="clearSearch" v-if="search">
+          <i class="far fa-times-circle"></i>
+        </div>
       </div>
       <game-tile
         v-for="game in filteredGames"
         :key="game.id"
         :game="game"
-        @selected="processGame(game)"
-      />
+        @selected="processGame(game)"/>
     </div>
     <game-details
       v-if="detailedGame"
       :game="detailedGame"
       :players="players"
       :game-stats="gameStats"
-      @close="detailedGame = null"
-    />
+      @close="detailedGame = null"/>
   </div>
 </template>
 
@@ -196,6 +195,9 @@ export default {
         this.gameStats = this.getGameStats(response.plays.play)
         this.detailedGame = game;
       })
+    },
+    clearSearch () {
+      this.search = "";
     }
   }
 }
@@ -203,6 +205,7 @@ export default {
 
 <style lang="scss">
   @import "./assets/styles/reset.scss";
+  @import "./assets/styles/variables.scss";
 
   body {
     background-color: #032d00;
@@ -214,12 +217,36 @@ export default {
         display: flex;
         justify-content: center;
         padding: 24px 0;
+        position: relative;
         width: 100%;
 
         input {
           font-size: 1.5rem;
           text-align: center;
           width: 90%;
+        }
+
+        .clear-search {
+          align-items: center;
+          display: flex;
+          font-size: 1.3rem;
+          height: 100%;
+          position: absolute;
+          right: 6%;
+          top: 0;
+
+          i {
+            color: black;
+            cursor: pointer;
+
+            @media screen and (min-width: $md) {
+              color: #b5b5b5;
+
+              &:hover {
+                color: black;
+              }
+            }
+          }
         }
       }
 
