@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <div class="search">
-      <input
-        v-model="search"
-        type="text"
-        placeholder="search..."
-      >
-    </div>
     <div
       v-if="!detailedGame"
       class="game-tiles"
     >
+      <div class="search">
+        <input
+          v-model="search"
+          type="text"
+          placeholder="search..."
+        >
+      </div>
       <game-tile
         v-for="game in filteredGames"
         :key="game.id"
@@ -140,25 +140,28 @@ export default {
       let players = {};
 
       plays.forEach((eachPlay) => {
+        if (!Array.isArray(eachPlay.players.player)) {
+          eachPlay.players.player = [eachPlay.players.player];
+        }
+
         eachPlay.players.player.forEach((eachPlayer) => {
           const target = eachPlayer.attributes;
           if (!players[target.name]) {
-            const averageScore = Math.round(parseInt(target.score));
-
             players[target.name] = {
               name: target.name,
               number: 1,
               wins: parseInt(target.win),
               handicap: 0,
               scores: [parseInt(target.score)],
-              average: averageScore || 0
+              average: parseInt(target.score) || 0
             };
           } else {
-            const averageScore = Math.round(players[target.name].scores.reduce((acc, current) => acc + current ) / players[target.name].scores.length);
-
             players[target.name].number++;
             players[target.name].wins = players[target.name].wins + parseInt(target.win);
             players[target.name].scores.push(parseInt(target.score));
+
+            const averageScore = Math.round(players[target.name].scores.reduce((acc, current) => acc + current ) / players[target.name].scores.length);
+
             players[target.name].average = averageScore || 0;
           }
         })
@@ -206,18 +209,20 @@ export default {
   }
 
   #app {
-    .search {
-      display: flex;
-      justify-content: center;
-      padding: 24px 0 0;
-
-      input {
-        font-size: 1.5rem;
-        text-align: center;
-        width: 90%;
-      }
-    }
     .game-tiles {
+      .search {
+        display: flex;
+        justify-content: center;
+        padding: 24px 0;
+        width: 100%;
+
+        input {
+          font-size: 1.5rem;
+          text-align: center;
+          width: 90%;
+        }
+      }
+
       display: flex;
       flex-wrap: wrap;
     }

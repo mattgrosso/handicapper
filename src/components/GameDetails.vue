@@ -46,7 +46,7 @@
         const playersArray = Object.keys(this.players).map((player) => {
           return this.players[player];
         });
-        console.log(playersArray);
+
         const sortedArray = playersArray.sort((firstEl, secondEl) => {
           if (this.handicapFor(firstEl) > this.handicapFor(secondEl)) {
             return 1;
@@ -57,8 +57,7 @@
           }
         });
 
-        console.log("sortedArray: ", sortedArray.map((el) => el.handicap));
-        return playersArray.sort();
+        return sortedArray;
       }
     },
     methods: {
