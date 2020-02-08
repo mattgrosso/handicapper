@@ -15,6 +15,11 @@ npm run serve
 npm run build
 ```
 
+### Compiles and minifies for production and then deploys with surge
+```
+npm run deploy
+```
+
 ### Lints and fixes files
 ```
 npm run lint
